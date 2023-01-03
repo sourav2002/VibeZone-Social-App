@@ -51,7 +51,9 @@ app.post("/posts", verifyToken, upload.single("picture"), createPost);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
-
+app.use("/", (req, res)=>{
+  res.status(200).send(`<h1>Welcome to VibeZone API.</h1>`)
+})
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
 mongoose.set("strictQuery", true);
