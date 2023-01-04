@@ -26,7 +26,7 @@ const app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-// app.use(morgan("common"));
+app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
@@ -52,20 +52,18 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/", (req, res)=>{
-  res.status(200).send(`<h1>Welcome to VibeZone API.</h1>`)
+  res.status(200).send(`<h1>Welcome to vibezone api.</h1>`)
 })
+
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
-mongoose.set("strictQuery", true);
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(PORT, () =>
-      console.log(`Server running on http://localhost:${PORT}`)
-    );
+    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
     /* ADD DATA ONE TIME */
     // User.insertMany(users);

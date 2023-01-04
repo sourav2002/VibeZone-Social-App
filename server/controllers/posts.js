@@ -12,52 +12,48 @@ export const createPost = async (req, res) => {
       lastName: user.lastName,
       location: user.location,
       description,
-      picturePath,
       userPicturePath: user.picturePath,
+      picturePath,
       likes: {},
       comments: [],
     });
-
     await newPost.save();
-    const posts = await Post.find();
-    res.status(201).json(posts);
-  } catch (error) {
-    res.status(409).json({ message: error.message });
+
+    const post = await Post.find();
+    res.status(201).json(post);
+  } catch (err) {
+    res.status(409).json({ message: err.message });
   }
 };
 
+/* READ */
 export const getFeedPosts = async (req, res) => {
   try {
-    const posts = Post.find();
-    res.status(200).json(posts);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
+    const post = await Post.find();
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
   }
 };
 
 export const getUserPosts = async (req, res) => {
   try {
     const { userId } = req.params;
-    Post.find({ userId: userId }, function (err, posts) {
-      if (err) {
-        return res.status(400).json({ message: err.message });
-      } else {
-        return res.status(200).json(posts);
-      }
-    });
-  } catch (error) {
-    res.status(404).json({ message: error.message });
+    const post = await Post.find({ userId });
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
   }
 };
 
 /* UPDATE */
-
 export const likePost = async (req, res) => {
   try {
     const { id } = req.params;
     const { userId } = req.body;
     const post = await Post.findById(id);
     const isLiked = post.likes.get(userId);
+
     if (isLiked) {
       post.likes.delete(userId);
     } else {
@@ -69,8 +65,9 @@ export const likePost = async (req, res) => {
       { likes: post.likes },
       { new: true }
     );
+
     res.status(200).json(updatedPost);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
+  } catch (err) {
+    res.status(404).json({ message: err.message });
   }
 };
