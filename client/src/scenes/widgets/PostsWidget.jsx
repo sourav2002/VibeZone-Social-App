@@ -57,7 +57,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           comments,
         }) => (
           <PostWidget
-            key={_id}
+            key={_id + Math.random()+Math.random()}
             postId={_id}
             postUserId={userId}
             name={`${firstName} ${lastName}`}
